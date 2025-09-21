@@ -82,4 +82,4 @@ Siga os passos abaixo para rodar a aplicação localmente:
     python manage.py runserver
     ```
 
-Agora você pode acessar a aplicação em [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
+Agora você pode acessar a aplicação em [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
