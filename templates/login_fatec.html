@@ -1,0 +1,247 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fatec - Login</title>
+  <style>
+    * {
+      margin:0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background-color: #eb0a0a;
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ====== HEADER ====== */
+    header {
+      background-color: #2e2e2e;
+      display: flex;
+      justify-content: flex-start;
+      gap: 60px;
+      align-items: center;
+      padding: 15px 40px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+      color: #5b748b;
+    }
+
+    .logo span:first-child {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    .logo span:last-child {
+      font-size: 2rex;
+      color: #da0b0b;
+    }
+
+    nav {
+      display: flex;
+      gap: 100px;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      text-align: center;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #f04444;
+    }
+
+    /* ====== MAIN ====== */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #8b0000;
+      padding: 20px;
+    }
+
+    .login-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      align-items: center;
+      justify-content: center;
+      max-width: 900px;
+      width: 100%;    
+    }
+
+    .login-text {
+      flex: 1 1 300px;
+      border: 1px solid #0000009c;
+      padding: 20px; 
+      border-radius: 8px;
+      margin-top: 70px;
+    }
+
+    .login-text h1 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .login-text p {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .login-form {
+      flex: 1 1 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      color: white;
+      position: relative;
+    }
+
+    .user-icon {
+      width: 80px;
+      height: 80px;
+      border: 2px solid white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2.5rem;
+      margin: 0 auto 20px auto;
+    }
+
+    /* Estilizando os inputs dentro do form */
+    form input[type="text"],
+    form input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid black;
+      border-radius: 2px;
+      outline: none;
+      background: transparent;
+      color: white;
+    }
+
+    input::placeholder {
+      color: #ddd;
+    }
+
+    .forgot-password {
+      color: white;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      background-color: black;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      background-color: #f04444;
+      color: black;
+    }
+
+    @media (max-width: 768px) {
+      .login-container {
+        flex-direction: column;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      nav {
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <span>Fatec Sorocaba</span>
+      <span>José Crespo Gonzales</span>
+    </div>
+    <nav>
+      <a href="{% url 'reservar' %}">RESERVAR HORÁRIO</a>
+      <a href="#">VISUALIZAR HORÁRIOS AGENDADOS</a>
+      <a href="#">AVALIAR COMPANHEIROS</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="login-container">
+      <div class="login-text">
+        <h1>Fazer Login</h1>
+        <p>
+          Utilize seu e-mail institucional para acessar o site.<br>
+          Necessário ter um e-mail vinculado ao Centro Paula Souza.
+        </p>
+      </div>
+
+      <div class="login-form">
+        <div class="user-icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" width="80">
+        </div>
+
+        <form method="POST" action="{% url 'login_fatec' %}">
+            {% csrf_token %} {% if messages %}
+                {% for message in messages %}
+                    <div style="background-color: rgba(255, 0, 0, 0.2); border: 1px solid red; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <input type="text" name="username" placeholder="Digite seu usuário ou e-mail" required />
+
+            <input type="password" name="password" placeholder="Digite sua senha" required />
+
+            <span class="forgot-password">Esqueceu sua senha?</span>
+
+            <div class="button-group">
+                <button type="button" id="cadastrar">CADASTRAR</button>
+                
+                <button type="submit">AVANÇAR</button>
+            </div>
+        </form>
+
+      </div>
+    </div>
+  </main>
+
+ <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

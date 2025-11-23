@@ -1,0 +1,291 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fatec - Cadastro de Usuário</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background-color: #8b0000;
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ====== HEADER ====== */
+    header {
+      background-color: #2e2e2e;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+      color: #5b748b;
+    }
+
+    .logo span:first-child {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    .logo span:last-child {
+      font-size: 1.1rem;
+      color: #da0b0b;
+    }
+
+    nav {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      text-align: center;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #f04444;
+    }
+
+    /* ====== MAIN ====== */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 40px;
+    }
+
+    h1 {
+      margin-bottom: 40px;
+      font-size: 2rem;
+      color: white;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px 30px;
+      width: 100%;
+      max-width: 1000px;
+      background-color: #8b0000;
+      color: white;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid black;
+      border-radius: 2px;
+      background: transparent;
+      color: white;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #ddd;
+    }
+
+    .senha-regras {
+      grid-column: span 3;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-top: -85px;
+      margin-left: 350px;
+      margin-right: auto;
+    }
+
+    .btn-container {
+      grid-column: span 3;
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: black;
+      color: white;
+      padding: 10px 40px;
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      background-color: #f04444;
+      color: black;
+    }
+
+    /* Estilo para mensagens de erro do Django */
+    .alert-box {
+        grid-column: span 3;
+        background-color: rgba(0, 0, 0, 0.3);
+        border: 1px solid #ff6b6b;
+        color: #ff6b6b;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    @media (max-width: 900px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+      .senha-regras, .btn-container, .alert-box {
+        grid-column: span 1;
+      }
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid black;
+      border-radius: 2px;
+      background-color: #8b0000;
+      color: white;
+      outline: none;
+      appearance: none;
+      /* Ícone da seta do select */
+      background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='14' viewBox='0 0 24 24' width='14' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 12px;
+      cursor: pointer;
+    }
+
+    select option {
+      background-color: #8b0000;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <span>Fatec Sorocaba</span>
+      <span>José Crespo Gonzales</span>
+    </div>
+    <nav>
+      <a href="{% url 'reservar' %}">RESERVAR HORÁRIO</a>
+      <a href="#">VISUALIZAR HORÁRIOS AGENDADOS</a>
+      <a href="#">AVALIAR COMPANHEIROS</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Cadastro de Usuário</h1>
+    
+    <form method="POST" action="{% url 'cadastro_fatec' %}" id="formCadastro">
+      {% csrf_token %} {% if messages %}
+      <div class="alert-box">
+          {% for message in messages %}
+             <p>{{ message }}</p>
+          {% endfor %}
+      </div>
+      {% endif %}
+
+      <div>
+        <label for="email">E-mail Institucional:</label>
+        <input type="email" id="email" name="email" placeholder="Digite seu e-mail institucional" required>
+      </div>
+      <div>
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+      </div>
+      <div>
+        <label for="esporte1">Esporte de Preferência 1:</label>
+        <select id="esporte1" name="esporte1">
+          <option value="">Selecione</option>
+          <option>Futebol</option>
+          <option>Vôlei</option>
+          <option>Basquete</option>
+          <option>Tênis</option>
+          <option>Corrida</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="registro">Registro de Aluno:</label>
+        <input type="text" id="registro" name="registro" placeholder="Digite seu Registro de Aluno" required>
+      </div>
+      <div>
+        <label for="confirmarSenha">Confirmação de Senha:</label>
+        <input type="password" id="confirmarSenha" name="confirmarSenha" placeholder="Confirme sua nova senha" required>
+      </div>
+      <div>
+        <label for="esporte2">Esporte de Preferência 2:</label>
+        <select id="esporte2" name="esporte2">
+          <option value="">Selecione</option>
+          <option>Futebol</option>
+          <option>Vôlei</option>
+          <option>Basquete</option>
+          <option>Tênis</option>
+          <option>Corrida</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="telefone">Telefone Pessoal:</label>
+        <input type="tel" id="telefone" name="telefone" placeholder="Digite seu telefone" required>
+      </div>
+      <div></div>
+      <div>
+        <label for="esporte3">Esporte de Preferência 3:</label>
+        <select id="esporte3" name="esporte3">
+          <option value="">Selecione</option>
+          <option>Futebol</option>
+          <option>Vôlei</option>
+          <option>Basquete</option>
+          <option>Tênis</option>
+          <option>Corrida</option>
+        </select>
+      </div>
+
+      <div class="senha-regras">
+        <p>
+          Digite sua senha contendo ao menos:<br>
+          • 1 Letra Maiúscula.<br>
+          • 1 Letra Minúscula.<br>
+          • 1 Número.<br>
+          • 1 Caractere Especial (ex.: !, @, #, $, etc).<br>
+          • Entre 8 e 50 caracteres.
+        </p>
+      </div>
+
+      <div class="btn-container">
+        <button type="submit">ENVIAR</button>
+      </div>
+    </form>
+  </main>
+  
+  <script src="{% static 'js/scriptCadastro.js' %}"></script>
+</body>
+</html>
